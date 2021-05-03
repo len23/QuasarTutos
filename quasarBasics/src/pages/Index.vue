@@ -1,32 +1,12 @@
 <template>
   <q-page padding>
-    <button class="pos-button" 
-      @click="counter++">
-        {{counter}}
-    </button>
-    <!-- mouseenter -->
-    <input 
-      v-model="message"
-     @keyup.enter="alertMessage"
-     @keyup.esc="clearMessage"
-     v-autofocuses
-     v-bind:class="{'error':message.length>22}"
-     ref="messageInput"
-     />
-    <button @click="clearMessage">Clear</button>
-    <!-- v-if and v-show -->
-    <h5 
-      class="border-gray" 
-      v-if="message.length"
-    >{{message}}</h5>
-    <h6
-      v-else
-    >No message</h6>
-
-    <hr>
-
-    <p>Upper Case: {{uppercase}}</p>
-    <p>Lower Case: {{message | lowerCase }}</p>
+      <ul>
+        <task v-for="(task,index) in tasks"
+        :key="task.id" 
+        :task="task" 
+        :index="index"
+        ></task>
+      </ul>
   </q-page>
 </template>
 
@@ -34,81 +14,34 @@
 export default {
    data() {
      return {
-       message: 'You loaded this page on ' + new Date().toLocaleString(),
-       counter: 0
+       tasks: [
+         {
+           id:1,
+           name: 'Watch Udemy',
+          dueDate: '2021/06/12',
+          dueTime: '19:08'
+         },
+          {
+            id:2,
+            name: 'Play Ps5',
+          dueDate: '2021/06/12',
+          dueTime: '18:08'
+         },
+         {
+           id:3,
+           name: 'Wash the dishes',
+          dueDate: '2021/06/12',
+          dueTime: '20:08'
+         }
+       ]
      }
   },
-  computed: {
-    uppercase() {
-      return this.message.toUpperCase();
-    },
-  },
-  methods: {
-    clearMessage() {
-      this.message = '';
-    },
-    handleKeyup(e) {
-      console.log(e);
-      if(e.keyCode == 27){
-        this.clearMessage()
-      }else if(e.keyCode == 13){
-        this.alertMessage()
-      }
-    },
-    alertMessage() {
-      alert(this.message)
-    }
-  },
-  filters: {
-    lowerCase(value) {
-      return value.toLowerCase()
-    }
-  },
-  directives: {
-    autofocuses: {
-      inserted(el) {
-        el.focus()
-      }
-    }
-  },
-  // beforeCreate() {
-  //   console.log('beforeCreate');
-  // },
-  // created() {
-  //   console.log('created');
-  // },
-  // beforeMount() {
-  //   console.log('beforeMount');
-  // },
-  mounted() {
-    console.log(this.$refs);
-    this.$refs.messageInput.className = 'bg-green'
-  },
-  // beforeUpdate() {
-  //   console.log('beforeUpdate');
-  // },
-  // updated() {
-  //    console.log('updated');
-  // },
-  // beforeDestroy() {
-  //   console.log('beforeDestroyed');
-  // },
-  // destroyed() {
-  //   console.log('destroyed');
-  // }
-
+  components: {
+    'task' : require('../components/Task').default
+  }
 }
 </script>
 
 <style>
-  .border-gray {
-    border: 1px solid gray;
-  }
-  .pos-button {
-    position: absolute;
-    right: 10px;
-  }
-  .error {
-    background: red;
-  }
+
 </style>
